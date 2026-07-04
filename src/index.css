@@ -1,0 +1,274 @@
+:root {
+  --bg: #0f1115;
+  --panel: #1b1e26;
+  --border: #333846;
+  --text: #e6e8ef;
+  --text-dim: #9aa0ae;
+  --flame: #d9633b;
+  --flame-bg: #3a2018;
+  --tide: #3b8ed9;
+  --tide-bg: #16283a;
+  --colorless: #7a8090;
+  --colorless-bg: #23262e;
+  --highlight: #f2c94c;
+
+  font: 16px/1.4 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100svh;
+  box-sizing: border-box;
+}
+
+.app--game-over {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.player-panel {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: var(--text);
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.player-panel:disabled {
+  opacity: 0.85;
+}
+
+.player-panel--selectable {
+  border-color: var(--highlight);
+  cursor: pointer;
+}
+
+.player-panel__label {
+  font-weight: 600;
+}
+
+.player-panel__life {
+  color: var(--highlight);
+  font-weight: 600;
+}
+
+.player-panel__stats {
+  color: var(--text-dim);
+  font-size: 0.85em;
+  margin-left: auto;
+}
+
+.board-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 108px;
+}
+
+.board-row__label {
+  width: 60px;
+  flex-shrink: 0;
+  color: var(--text-dim);
+  font-size: 0.85em;
+  padding-top: 8px;
+}
+
+.board-row__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+
+.board-row__empty {
+  color: var(--text-dim);
+  font-size: 0.85em;
+  padding-top: 8px;
+}
+
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.hand--face-down {
+  justify-content: center;
+}
+
+.phase-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+
+.phase-bar__button {
+  background: var(--highlight);
+  color: #1a1400;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: 600;
+}
+
+.combat-overlay {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px dashed var(--highlight);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.9em;
+}
+
+.combat-overlay button {
+  background: var(--tide);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.log {
+  color: var(--text-dim);
+  font-size: 0.8em;
+  padding: 6px 0;
+}
+
+.card {
+  width: 120px;
+  min-height: 90px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--colorless-bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  text-align: left;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.card:disabled {
+  cursor: default;
+}
+
+.card--flame {
+  background: var(--flame-bg);
+  border-color: var(--flame);
+}
+
+.card--tide {
+  background: var(--tide-bg);
+  border-color: var(--tide);
+}
+
+.card--land {
+  min-height: 60px;
+  justify-content: center;
+}
+
+.card--back {
+  width: 60px;
+  height: 84px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(45deg, var(--panel), var(--panel) 6px, var(--border) 6px, var(--border) 12px);
+  border: 1px solid var(--border);
+}
+
+.card--tapped {
+  opacity: 0.5;
+  transform: rotate(6deg);
+}
+
+.card--selected {
+  outline: 2px solid var(--highlight);
+}
+
+.card--highlighted {
+  outline: 2px solid var(--tide);
+}
+
+.card--unaffordable {
+  opacity: 0.45;
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.card__cost {
+  color: var(--highlight);
+  font-variant-numeric: tabular-nums;
+}
+
+.card__text {
+  font-size: 0.75em;
+  color: var(--text-dim);
+  flex: 1;
+}
+
+.card__pt {
+  align-self: flex-end;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.card__damage {
+  color: #ff6b6b;
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.card__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.65em;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 4px;
+  color: var(--text-dim);
+}
