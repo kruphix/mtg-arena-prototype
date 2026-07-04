@@ -3,11 +3,9 @@ import { currentPower, currentToughness } from '../../engine/combat';
 
 function formatCost(def: CardDefinition): string {
   if (!def.cost) return '';
-  const parts: string[] = [];
-  if (def.cost.flame) parts.push(`${def.cost.flame}F`);
-  if (def.cost.tide) parts.push(`${def.cost.tide}T`);
-  if (def.cost.generic) parts.push(`${def.cost.generic}`);
-  return parts.join(' ') || '0';
+  const { generic, flame = 0, tide = 0 } = def.cost;
+  const cost = `${generic > 0 ? generic : ''}${'F'.repeat(flame)}${'T'.repeat(tide)}`;
+  return cost || '0';
 }
 
 interface CardViewProps {
