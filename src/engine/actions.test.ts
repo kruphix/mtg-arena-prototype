@@ -52,6 +52,35 @@ describe('CAST_SPELL', () => {
     expect(state.players[1].life).toBe(17);
   });
 
+  it('rejects targeting a non-creature permanent with a creature-only spell', () => {
+    const spell = handCard('recklessCharge');
+    const land = makePermanent('ashcrag');
+    const lands = [makePermanent('ashcrag'), makePermanent('ashcrag')];
+    let state = makeState({
+      players: [
+        makePlayer('p1', { hand: [spell], battlefield: [...lands, land] }),
+        makePlayer('p2'),
+      ],
+    });
+    state = gameReducer(state, {
+      type: 'CAST_SPELL',
+      instanceId: spell.instanceId,
+      target: { kind: 'permanent', instanceId: land.instanceId },
+    });
+    expect(state.players[0].hand).toHaveLength(1);
+    expect(state.players[0].battlefield.every((p) => !p.tapped)).toBe(true);
+  });
+
+  it('rejects casting a creature-only spell with no target at all', () => {
+    const spell = handCard('frostLock');
+    const lands = [makePermanent('ashcrag'), makePermanent('ashcrag'), makePermanent('mistpool')];
+    let state = makeState({
+      players: [makePlayer('p1', { hand: [spell], battlefield: lands }), makePlayer('p2')],
+    });
+    state = gameReducer(state, { type: 'CAST_SPELL', instanceId: spell.instanceId });
+    expect(state.players[0].hand).toHaveLength(1);
+  });
+
   it('a creature enters with summoning sickness', () => {
     const creature = handCard('cinderHound');
     const lands = [makePermanent('ashcrag'), makePermanent('ashcrag')];

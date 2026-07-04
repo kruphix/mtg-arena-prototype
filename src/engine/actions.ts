@@ -2,7 +2,7 @@ import { getCard } from './cards';
 import { canBlock, findPermanent, resolveCombatDamage } from './combat';
 import { applyEffect } from './effects';
 import { drawCard, getOpponent, getPlayer } from './gameState';
-import type { GameAction, GameState, ManaCost, Permanent, Phase, PlayerState, TargetRef } from './types';
+import type { GameAction, GameState, ManaCost, Permanent, Phase, PlayerState, TargetKind, TargetRef } from './types';
 
 const PHASE_ORDER: Phase[] = [
   'untap',
@@ -137,6 +137,21 @@ function playLand(state: GameState, instanceId: string): void {
   state.log.push(`${player.id} played ${def.name}.`);
 }
 
+function isValidTarget(state: GameState, targetKind: TargetKind | undefined, target: TargetRef | undefined): boolean {
+  const kind = targetKind ?? 'none';
+  if (kind === 'none') return true;
+  if (!target) return false;
+
+  if (target.kind === 'permanent') {
+    if (kind === 'player') return false;
+    const found = findPermanent(state, target.instanceId);
+    return found !== undefined && getCard(found.permanent.defId).type === 'creature';
+  }
+
+  if (kind === 'creature') return false;
+  return state.players.some((p) => p.id === target.playerId);
+}
+
 function castSpell(state: GameState, instanceId: string, target: TargetRef | undefined): void {
   if (state.phase !== 'main1' && state.phase !== 'main2') return;
   const player = getPlayer(state, state.activePlayerId);
@@ -146,6 +161,7 @@ function castSpell(state: GameState, instanceId: string, target: TargetRef | und
   const card = player.hand[idx];
   const def = getCard(card.defId);
   if (def.type === 'land' || !def.cost) return;
+  if (!isValidTarget(state, def.targetKind, target)) return;
 
   if (!payManaCost(player, def.cost)) return;
   player.hand.splice(idx, 1);

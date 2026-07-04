@@ -133,14 +133,14 @@ export default function App() {
       : state.phase === 'declareBlockers'
         ? new Set(state.attackers)
         : canTargetCreature
-          ? new Set(activePlayer.battlefield.map((p) => p.instanceId))
+          ? new Set(activePlayer.battlefield.filter((p) => getCard(p.defId).type === 'creature').map((p) => p.instanceId))
           : new Set<string>();
 
   const topClickable =
     state.phase === 'declareBlockers'
       ? eligibleBlockerIds(opponent, pendingAttackerPermanent, usedBlockerIds)
       : canTargetCreature
-        ? new Set(opponent.battlefield.map((p) => p.instanceId))
+        ? new Set(opponent.battlefield.filter((p) => getCard(p.defId).type === 'creature').map((p) => p.instanceId))
         : new Set<string>();
 
   if (state.winnerId) {
