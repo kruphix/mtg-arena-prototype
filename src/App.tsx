@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from 'react';
 import { gameReducer } from './engine/actions';
 import { getCard } from './engine/cards';
 import { canBlock, findPermanent } from './engine/combat';
-import { createInitialGameState, getOpponent, getPlayer } from './engine/gameState';
+import { createInitialGameState, getOpponent, getPlayer, type HandOverrides } from './engine/gameState';
 import type { Permanent, PlayerState, TargetRef } from './engine/types';
 import { Board } from './ui/components/Board';
 import { CombatOverlay } from './ui/components/CombatOverlay';
@@ -27,8 +27,21 @@ function eligibleBlockerIds(defender: PlayerState, attacker: Permanent | undefin
   );
 }
 
+function parseHandOverridesFromUrl(): HandOverrides | undefined {
+  const params = new URLSearchParams(window.location.search);
+  const p1 = params.get('p1');
+  const p2 = params.get('p2');
+  if (!p1 && !p2) return undefined;
+  return {
+    p1: p1 ? p1.split(',').filter(Boolean) : undefined,
+    p2: p2 ? p2.split(',').filter(Boolean) : undefined,
+  };
+}
+
 export default function App() {
-  const [state, dispatch] = useReducer(gameReducer, undefined, () => createInitialGameState());
+  const [state, dispatch] = useReducer(gameReducer, undefined, () =>
+    createInitialGameState(Math.random, parseHandOverridesFromUrl()),
+  );
 
   const [selectedHandInstanceId, setSelectedHandInstanceId] = useState<string | null>(null);
   const [selectedAttackerIds, setSelectedAttackerIds] = useState<Set<string>>(new Set());

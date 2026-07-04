@@ -64,6 +64,31 @@ Commands the REPL understands (Playwright selector syntax — CSS,
 - `console [--errors]` — dumps captured console/page errors
 - `quit`
 
+## Testing with specific cards (don't rely on random draws)
+
+Relying on the random opening hand to eventually draw the card you're
+testing wastes turns and tokens. Instead, force specific cards into either
+player's opening hand via URL query params — `p1`/`p2`, each a
+comma-separated list of card `defId`s (see `src/engine/cards.ts` for the
+full id list, e.g. `sparkBolt`, `ashcrag`, `mistpool`, `combust`,
+`emberWhelp`, `infernoWave`, `frostLock`...). Listed cards are pulled out
+of that player's shuffled library and placed in hand; the rest of the
+7-card hand is topped up with normal random draws. Omit a player's param
+to leave their hand fully random.
+
+```bash
+cat <<'EOF' | node .claude/skills/run-app/scripts/browser-repl.mjs
+nav http://localhost:5173/?p1=sparkBolt,ashcrag,ashcrag&p2=combust,mistpool,mistpool
+wait-for text=Main Phase 1
+screenshot ready
+quit
+EOF
+```
+
+A typo'd/nonexistent defId throws `Card not in deck (bad hand override): <id>`
+immediately (visible via `console --errors`), so mistakes surface fast
+rather than silently drawing the wrong card.
+
 ## App-specific notes
 
 - Every permanent/card renders as a `<button>` (see `CardView.tsx`); it's

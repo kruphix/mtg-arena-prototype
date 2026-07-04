@@ -10,10 +10,19 @@ function drawN(library: CardInstance[], hand: CardInstance[], n: number): void {
   }
 }
 
-function createPlayer(id: string, rng: Rng): PlayerState {
+function createPlayer(id: string, rng: Rng, handOverride?: string[]): PlayerState {
   const library = shuffle(buildStandardDeck(), rng);
   const hand: CardInstance[] = [];
-  drawN(library, hand, OPENING_HAND_SIZE);
+  if (handOverride && handOverride.length > 0) {
+    for (const defId of handOverride) {
+      const idx = library.findIndex((c) => c.defId === defId);
+      if (idx === -1) throw new Error(`Card not in deck (bad hand override): ${defId}`);
+      hand.push(library.splice(idx, 1)[0]);
+    }
+    drawN(library, hand, Math.max(0, OPENING_HAND_SIZE - hand.length));
+  } else {
+    drawN(library, hand, OPENING_HAND_SIZE);
+  }
   return {
     id,
     life: 20,
@@ -25,9 +34,14 @@ function createPlayer(id: string, rng: Rng): PlayerState {
   };
 }
 
-export function createInitialGameState(rng: Rng = Math.random): GameState {
+export interface HandOverrides {
+  p1?: string[];
+  p2?: string[];
+}
+
+export function createInitialGameState(rng: Rng = Math.random, handOverrides?: HandOverrides): GameState {
   return {
-    players: [createPlayer('p1', rng), createPlayer('p2', rng)],
+    players: [createPlayer('p1', rng, handOverrides?.p1), createPlayer('p2', rng, handOverrides?.p2)],
     activePlayerId: 'p1',
     turn: 1,
     phase: 'main1',
