@@ -249,6 +249,13 @@ button {
   flex: 1;
 }
 
+.card__flavor {
+  font-size: 0.75em;
+  font-style: italic;
+  color: var(--text-dim);
+  flex: 1;
+}
+
 .card__pt {
   align-self: flex-end;
   font-weight: 700;

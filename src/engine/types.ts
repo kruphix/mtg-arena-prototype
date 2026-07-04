@@ -17,6 +17,7 @@ export interface CardDefinition {
   name: string;
   type: CardType;
   text: string;
+  flavor?: string;
   cost?: ManaCost;
   colors: Color[];
   producesColor?: Color;
