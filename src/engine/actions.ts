@@ -183,6 +183,7 @@ function declareAttackers(state: GameState, attackerIds: string[]): void {
   const validIds = attackerIds.filter((id) => {
     const permanent = player.battlefield.find((p) => p.instanceId === id);
     if (!permanent) return false;
+    if (state.attackers.includes(id)) return true;
     if (permanent.tapped || permanent.summoningSickness || permanent.frozen) return false;
     return getCard(permanent.defId).type === 'creature';
   });

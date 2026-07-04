@@ -141,6 +141,23 @@ describe('combat integration', () => {
     expect(state.players[1].battlefield).toHaveLength(0);
   });
 
+  it('keeps the attack declared when DECLARE_ATTACKERS fires twice for the same creature (e.g. a double-click)', () => {
+    const attacker = makePermanent('flameScout');
+    let state = makeState({
+      players: [makePlayer('p1', { battlefield: [attacker] }), makePlayer('p2', { life: 20 })],
+      phase: 'declareAttackers',
+    });
+
+    state = gameReducer(state, { type: 'DECLARE_ATTACKERS', attackerIds: [attacker.instanceId] });
+    state = gameReducer(state, { type: 'DECLARE_ATTACKERS', attackerIds: [attacker.instanceId] });
+    expect(state.attackers).toEqual([attacker.instanceId]);
+
+    state = gameReducer(state, { type: 'ADVANCE_PHASE' });
+    state = gameReducer(state, { type: 'DECLARE_BLOCKERS', blocks: {} });
+    state = gameReducer(state, { type: 'ADVANCE_PHASE' });
+    expect(state.players[1].life).toBe(18);
+  });
+
   it('rejects a block on a flying attacker by a non-flying creature', () => {
     const attacker = makePermanent('ridgeWyvern');
     const blocker = makePermanent('cinderHound');
