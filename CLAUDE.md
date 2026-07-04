@@ -17,6 +17,8 @@ A browser-based, local-hotseat card game prototype in the spirit of Magic: The G
 
 There is no separate typecheck script; `npx tsc -b` (project-references build) is the way to type-check without emitting/bundling.
 
+`npm test` only covers `src/engine/`; nothing exercises `App.tsx` or `src/ui/`. To verify a UI change actually works, use the `run-app` project skill (`.claude/skills/run-app/SKILL.md`), which drives the real dev server with a headless-Chromium Playwright REPL (`playwright` is a devDependency; Chromium is already installed locally via `npx playwright install chromium`).
+
 ## Architecture
 
 The code is split into a pure rules **engine** (`src/engine/`, zero React imports) and a **UI** layer (`src/ui/` + `src/App.tsx`) that only dispatches actions into the engine and renders the resulting state. This separation is deliberate: combat/mana/effect logic is unit-tested in isolation from rendering, and the UI stays "dumb" (no game rules live in components).
@@ -47,3 +49,5 @@ Mana payment is automatic: casting a card auto-taps whatever untapped lands are 
 `App.tsx` owns the reducer (`useReducer(gameReducer, ...)`) plus local-only UI state for in-progress selections (a card awaiting a target, attackers being multi-selected, block assignments being built up) — none of this selection state is authoritative; it's discarded on dispatch or on phase change (see the `useEffect` keyed on `state.phase`/`state.turn`). Components (`Board`, `Hand`, `CardView`, `PlayerPanel`, `PhaseBar`, `CombatOverlay`) are presentational; they receive state/callbacks as props and contain no game rules.
 
 The active player's hand is always rendered at the bottom (face up); the opponent's hand is rendered face-down at the top — this flips each turn since it's hotseat play on one screen, not tied to `players[0]`/`players[1]`.
+
+Blocker assignment is order-dependent by design: the defender must click an attacker first, then a blocker (`pendingBlockAttackerId` in `App.tsx`). `eligibleBlockerIds` returns an empty set until an attacker is pending — don't relax that check, it previously allowed blockers to be clicked (silently, with no effect) before an attacker was selected, which read as "blocking doesn't work."

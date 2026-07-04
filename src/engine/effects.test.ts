@@ -50,6 +50,21 @@ describe('applyEffect', () => {
     expect(state.players[1].hand).toHaveLength(1);
   });
 
+  it('damageAllCreatures2 damages creatures but leaves lands untouched', () => {
+    const creature = makePermanent('firebrandAdept');
+    const land = makePermanent('ashcrag');
+    const state = makeState({
+      players: [
+        makePlayer('p1', { battlefield: [land] }),
+        makePlayer('p2', { battlefield: [creature] }),
+      ],
+    });
+    applyEffect(state, 'damageAllCreatures2', 'p1', undefined);
+    expect(state.players[0].battlefield).toHaveLength(1);
+    expect(state.players[0].battlefield[0].damage).toBe(0);
+    expect(state.players[1].battlefield[0].damage).toBe(2);
+  });
+
   it('pumpPower3 grants a temporary power bonus', () => {
     const target = makePermanent('emberWhelp');
     const state = makeState({

@@ -19,9 +19,10 @@ function eligibleAttackerIds(player: PlayerState): Set<string> {
 }
 
 function eligibleBlockerIds(defender: PlayerState, attacker: Permanent | undefined, used: Set<string>): Set<string> {
+  if (!attacker) return new Set();
   return new Set(
     defender.battlefield
-      .filter((p) => !p.tapped && !p.frozen && !used.has(p.instanceId) && (!attacker || canBlock(p, attacker)))
+      .filter((p) => !p.tapped && !p.frozen && !used.has(p.instanceId) && canBlock(p, attacker))
       .map((p) => p.instanceId),
   );
 }
@@ -105,6 +106,11 @@ export default function App() {
     ? findPermanent(state, pendingBlockAttackerId)?.permanent
     : undefined;
 
+  const bottomSelectedIds =
+    state.phase === 'declareBlockers'
+      ? new Set(pendingBlockAttackerId ? [pendingBlockAttackerId] : [])
+      : selectedAttackerIds;
+
   const canTargetCreature = Boolean(targetingDef) && (targetingDef?.targetKind === 'creature' || targetingDef?.targetKind === 'any');
   const canTargetPlayer = Boolean(targetingDef) && (targetingDef?.targetKind === 'player' || targetingDef?.targetKind === 'any');
 
@@ -167,7 +173,7 @@ export default function App() {
         player={activePlayer}
         label={activePlayer.id}
         onPermanentClick={handleAttackerBoardClick}
-        selectedIds={selectedAttackerIds}
+        selectedIds={bottomSelectedIds}
         clickableIds={bottomClickable}
       />
       <Hand

@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# run-app skill scratch output
+.claude/skills/run-app/screenshots/

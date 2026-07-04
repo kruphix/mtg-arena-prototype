@@ -1,3 +1,4 @@
+import { getCard } from './cards';
 import { findPermanent, isLethal } from './combat';
 import { drawCard, getOpponent, getPlayer } from './gameState';
 import type { GameState, TargetRef } from './types';
@@ -58,11 +59,14 @@ export const EFFECTS: Record<string, EffectFn> = {
   damageAllCreatures2: (state) => {
     for (const player of state.players) {
       for (const permanent of player.battlefield) {
+        if (getCard(permanent.defId).type !== 'creature') continue;
         permanent.damage += 2;
       }
     }
     for (const player of state.players) {
-      const deadIds = player.battlefield.filter((p) => isLethal(p)).map((p) => p.instanceId);
+      const deadIds = player.battlefield
+        .filter((p) => getCard(p.defId).type === 'creature' && isLethal(p))
+        .map((p) => p.instanceId);
       for (const id of deadIds) {
         const idx = player.battlefield.findIndex((p) => p.instanceId === id);
         if (idx === -1) continue;
