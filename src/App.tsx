@@ -101,7 +101,15 @@ export default function App() {
 
   function handleDefenderBoardClick(instanceId: string) {
     if (state.phase === 'declareBlockers' && pendingBlockAttackerId) {
-      setBlockAssignments((prev) => ({ ...prev, [pendingBlockAttackerId]: instanceId }));
+      if (blockAssignments[pendingBlockAttackerId] === instanceId) {
+        setBlockAssignments((prev) => {
+          const next = { ...prev };
+          delete next[pendingBlockAttackerId];
+          return next;
+        });
+      } else {
+        setBlockAssignments((prev) => ({ ...prev, [pendingBlockAttackerId]: instanceId }));
+      }
       setPendingBlockAttackerId(null);
     } else if (targetingDef && (targetingDef.targetKind === 'creature' || targetingDef.targetKind === 'any')) {
       castWithTarget({ kind: 'permanent', instanceId });
@@ -138,9 +146,15 @@ export default function App() {
           ? new Set(activePlayer.battlefield.filter((p) => getCard(p.defId).type === 'creature').map((p) => p.instanceId))
           : new Set<string>();
 
+  const usedByOtherAttackers = new Set(
+    Object.entries(blockAssignments)
+      .filter(([attackerId]) => attackerId !== pendingBlockAttackerId)
+      .map(([, blockerId]) => blockerId),
+  );
+
   const topClickable =
     state.phase === 'declareBlockers'
-      ? eligibleBlockerIds(opponent, pendingAttackerPermanent, usedBlockerIds)
+      ? eligibleBlockerIds(opponent, pendingAttackerPermanent, usedByOtherAttackers)
       : canTargetCreature
         ? new Set(opponent.battlefield.filter((p) => getCard(p.defId).type === 'creature').map((p) => p.instanceId))
         : new Set<string>();
