@@ -172,60 +172,64 @@ export default function App() {
 
   return (
     <div className="app">
-      <PlayerPanel
-        player={opponent}
-        label={`${opponent.id} (opponent)`}
-        isActive={false}
-        selectable={canTargetPlayer}
-        onSelect={() => handlePlayerPanelClick(opponent.id)}
-      />
-      <Hand hand={opponent.hand} owner={opponent} faceDown canAct={false} onCardClick={() => {}} />
-      <Board
-        player={opponent}
-        label={opponent.id}
-        onPermanentClick={handleDefenderBoardClick}
-        clickableIds={topClickable}
-        selectedIds={topSelectedIds}
-        landsFirst
-      />
+      <div className="app__main">
+        <PlayerPanel
+          player={opponent}
+          label={`${opponent.id} (opponent)`}
+          isActive={false}
+          selectable={canTargetPlayer}
+          onSelect={() => handlePlayerPanelClick(opponent.id)}
+        />
+        <Hand hand={opponent.hand} owner={opponent} faceDown canAct={false} onCardClick={() => {}} />
+        <Board
+          player={opponent}
+          label={opponent.id}
+          onPermanentClick={handleDefenderBoardClick}
+          clickableIds={topClickable}
+          selectedIds={topSelectedIds}
+          landsFirst
+        />
 
-      <PhaseBar
-        phase={state.phase}
-        activePlayerLabel={`${activePlayer.id} (active)`}
-        turn={state.turn}
-        onAdvance={() => dispatch({ type: 'ADVANCE_PHASE' })}
-      />
-      <CombatOverlay
-        phase={state.phase}
-        selectedAttackerCount={selectedAttackerIds.size}
-        blockAssignmentCount={Object.keys(blockAssignments).length}
-        attackerCount={state.attackers.length}
-        onConfirmAttackers={() =>
-          dispatch({ type: 'DECLARE_ATTACKERS', attackerIds: Array.from(selectedAttackerIds) })
-        }
-        onConfirmBlockers={() => dispatch({ type: 'DECLARE_BLOCKERS', blocks: blockAssignments })}
-      />
+        <CombatOverlay
+          phase={state.phase}
+          selectedAttackerCount={selectedAttackerIds.size}
+          blockAssignmentCount={Object.keys(blockAssignments).length}
+          attackerCount={state.attackers.length}
+          onConfirmAttackers={() =>
+            dispatch({ type: 'DECLARE_ATTACKERS', attackerIds: Array.from(selectedAttackerIds) })
+          }
+          onConfirmBlockers={() => dispatch({ type: 'DECLARE_BLOCKERS', blocks: blockAssignments })}
+        />
 
-      <Board
-        player={activePlayer}
-        label={activePlayer.id}
-        onPermanentClick={handleAttackerBoardClick}
-        selectedIds={bottomSelectedIds}
-        clickableIds={bottomClickable}
-      />
-      <Hand
-        hand={activePlayer.hand}
-        owner={activePlayer}
-        canAct={inMainPhase}
-        selectedInstanceId={selectedHandInstanceId}
-        onCardClick={handleHandCardClick}
-      />
-      <PlayerPanel player={activePlayer} label={`${activePlayer.id} (you)`} isActive selectable={false} />
+        <Board
+          player={activePlayer}
+          label={activePlayer.id}
+          onPermanentClick={handleAttackerBoardClick}
+          selectedIds={bottomSelectedIds}
+          clickableIds={bottomClickable}
+        />
+        <Hand
+          hand={activePlayer.hand}
+          owner={activePlayer}
+          canAct={inMainPhase}
+          selectedInstanceId={selectedHandInstanceId}
+          onCardClick={handleHandCardClick}
+        />
+        <PlayerPanel player={activePlayer} label={`${activePlayer.id} (you)`} isActive selectable={false} />
+      </div>
 
-      <div className="log">
-        {state.log.slice(-5).map((entry, i) => (
-          <div key={i}>{entry}</div>
-        ))}
+      <div className="app__sidebar">
+        <PhaseBar
+          phase={state.phase}
+          activePlayerLabel={`${activePlayer.id} (active)`}
+          turn={state.turn}
+          onAdvance={() => dispatch({ type: 'ADVANCE_PHASE' })}
+        />
+        <div className="log">
+          {state.log.slice(-20).map((entry, i) => (
+            <div key={i}>{entry}</div>
+          ))}
+        </div>
       </div>
     </div>
   );

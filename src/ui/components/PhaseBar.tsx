@@ -24,7 +24,9 @@ export function PhaseBar({ phase, activePlayerLabel, turn, onAdvance }: PhaseBar
   return (
     <div className="phase-bar">
       <div className="phase-bar__info">
-        Turn {turn} · {activePlayerLabel} · {PHASE_LABELS[phase]}
+        <div className="phase-bar__turn">Turn {turn}</div>
+        <div>{activePlayerLabel}</div>
+        <div className="phase-bar__phase">{PHASE_LABELS[phase]}</div>
       </div>
       <button type="button" className="phase-bar__button" onClick={onAdvance}>
         {phase === 'end' ? 'End Turn' : 'Next Phase'}

@@ -29,20 +29,37 @@ button {
 }
 
 .app {
-  max-width: 1100px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 12px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: stretch;
+  gap: 16px;
   min-height: 100svh;
   box-sizing: border-box;
 }
 
 .app--game-over {
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 20px;
+}
+
+.app__main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.app__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 240px;
+  flex-shrink: 0;
 }
 
 .player-panel {
@@ -133,12 +150,28 @@ button {
 
 .phase-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 8px 14px;
+  padding: 14px;
+}
+
+.phase-bar__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.phase-bar__turn {
+  color: var(--text-dim);
+  font-size: 0.85em;
+}
+
+.phase-bar__phase {
+  font-weight: 600;
 }
 
 .phase-bar__button {
@@ -146,7 +179,7 @@ button {
   color: #1a1400;
   border: none;
   border-radius: 6px;
-  padding: 6px 14px;
+  padding: 8px 14px;
   font-weight: 600;
 }
 
@@ -175,7 +208,13 @@ button {
 .log {
   color: var(--text-dim);
   font-size: 0.8em;
-  padding: 6px 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .card {
