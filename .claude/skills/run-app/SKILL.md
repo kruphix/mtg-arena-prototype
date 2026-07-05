@@ -24,6 +24,12 @@ Default port is `5173` (see `CLAUDE.md`). Stop it with:
 pkill -f vite
 ```
 
+On Windows Git-Bash there's no `pkill`; use PowerShell instead:
+
+```powershell
+Get-NetTCPConnection -LocalPort 5173 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }
+```
+
 Kill any stale instance before relaunching or you'll get `EADDRINUSE` /
 a stale second instance on 5174.
 
@@ -101,12 +107,24 @@ rather than silently drawing the wrong card.
 - Cards with duplicate names (e.g. two `Ashcrag` lands) need
   `text=Ashcrag >> nth=0` / `nth=1` to disambiguate — a bare `text=`
   selector throws a strict-mode violation if it matches more than one.
+- The sidebar's phase label (e.g. "Declare Attackers") and the
+  combat-overlay button text can collide with plain `text=` selectors
+  even when Playwright doesn't report a strict-mode error — `page.click`
+  can silently pick the non-interactive label and time out waiting for
+  it to become "enabled". Prefer unambiguous CSS selectors instead:
+  `.phase-bar__button` for the phase-advance button (labeled "Next
+  Phase", or "End Turn" during the `end` phase), `.combat-overlay
+  button:has-text("Confirm Attackers")` / `"Confirm Blockers"` for the
+  combat-declaration buttons, and `button.card:has-text("Card Name")`
+  for board/hand cards.
 - To reach combat: play a land, cast/hold creatures across turns (there's
   no haste in this prototype — summoning sickness blocks attacking the
-  turn a creature enters), click "Next Phase" until `declareAttackers`,
-  click a creature to select it as attacker, click "Declare Attackers",
-  click "Next Phase" into `declareBlockers`, click the attacker then the
-  blocking creature.
+  turn a creature enters), click `.phase-bar__button` until
+  `declareAttackers`, click a creature to select it as attacker, click
+  `.combat-overlay button:has-text("Confirm Attackers")`, click
+  `.phase-bar__button` into `declareBlockers`, click the attacker then
+  the blocking creature (clicking the same attacker/blocker pair again
+  un-assigns that block).
 
 ## Example: verifying a bug fix end to end
 
@@ -114,7 +132,7 @@ rather than silently drawing the wrong card.
 cat <<'EOF' | node .claude/skills/run-app/scripts/browser-repl.mjs
 nav http://localhost:5173
 click text=Ashcrag >> nth=0
-click text=Next Phase
+click .phase-bar__button
 screenshot after-land
 console --errors
 quit

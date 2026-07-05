@@ -1,32 +1,20 @@
-# React + TypeScript + Vite
+# MTG Arena-style Hotseat Prototype
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A browser-based, local-hotseat card game prototype in the spirit of Magic: The Gathering Arena — two players, same screen, take turns. Built with React + Vite + TypeScript. Card names/text are original; mechanics (mana, creatures, combat, spells) are MTG-like but the content is not copied from Wizards of the Coast.
 
-Currently, two official plugins are available:
+## Running it
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Then open the printed local URL (default `http://localhost:5173`).
+
+## Other commands
+
+- `npm test` — run the engine test suite (`vitest run`).
+- `npm run build` — type-check (`tsc -b`) then production build.
+- `npm run lint` — run oxlint.
+
+See `CLAUDE.md` for architecture notes (engine vs. UI split, phase machine, etc.).
