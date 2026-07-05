@@ -243,6 +243,13 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
+.card__type {
+  font-size: 0.7em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .card__text {
   font-size: 0.75em;
   color: var(--text-dim);

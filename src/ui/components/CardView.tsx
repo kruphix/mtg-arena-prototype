@@ -8,6 +8,12 @@ function formatCost(def: CardDefinition): string {
   return cost || '0';
 }
 
+const TYPE_LABELS: Record<CardDefinition['type'], string> = {
+  land: 'Land',
+  creature: 'Creature',
+  spell: 'Sorcery',
+};
+
 interface CardViewProps {
   def: CardDefinition;
   permanent?: Permanent;
@@ -40,6 +46,7 @@ export function CardView({ def, permanent, affordable = true, selected, highligh
         <span className="card__name">{def.name}</span>
         {def.cost && <span className="card__cost">{formatCost(def)}</span>}
       </div>
+      <div className="card__type">{TYPE_LABELS[def.type]}</div>
       {def.text && <div className="card__text">{def.text}</div>}
       {def.flavor && <div className="card__flavor">{def.flavor}</div>}
       {permanent && permanent.damage > 0 && (
