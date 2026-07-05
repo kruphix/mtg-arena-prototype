@@ -22,7 +22,10 @@ function eligibleBlockerIds(defender: PlayerState, attacker: Permanent | undefin
   if (!attacker) return new Set();
   return new Set(
     defender.battlefield
-      .filter((p) => !p.tapped && !p.frozen && !used.has(p.instanceId) && canBlock(p, attacker))
+      .filter(
+        (p) =>
+          getCard(p.defId).type === 'creature' && !p.tapped && !p.frozen && !used.has(p.instanceId) && canBlock(p, attacker),
+      )
       .map((p) => p.instanceId),
   );
 }
@@ -189,6 +192,8 @@ export default function App() {
           selectedIds={topSelectedIds}
           landsFirst
         />
+
+        <div className="battlefield-divider" />
 
         <CombatOverlay
           phase={state.phase}

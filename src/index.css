@@ -135,6 +135,10 @@ button {
   padding-top: 8px;
 }
 
+.battlefield-divider {
+  border-top: 1px dashed var(--border);
+}
+
 .hand {
   display: flex;
   flex-wrap: wrap;
