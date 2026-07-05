@@ -57,6 +57,7 @@ export function CardView({ def, permanent, affordable = true, selected, highligh
         {def.cost && <span className="card__cost">{formatCost(def)}</span>}
       </div>
       <div className="card__type">{TYPE_LABELS[def.type]}</div>
+      <img className="card__art" src={`/cards/${def.id}.svg`} alt="" />
       {def.text && <div className="card__text">{def.text}</div>}
       {def.flavor && <div className="card__flavor">{def.flavor}</div>}
       {permanent && permanent.damage > 0 && (
