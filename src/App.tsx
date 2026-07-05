@@ -171,6 +171,7 @@ export default function App() {
         onPermanentClick={handleDefenderBoardClick}
         clickableIds={topClickable}
         selectedIds={topSelectedIds}
+        landsFirst
       />
 
       <PhaseBar
