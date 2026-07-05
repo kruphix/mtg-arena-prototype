@@ -40,6 +40,16 @@ export function CardView({ def, permanent, affordable = true, selected, highligh
   const power = isCreature ? (permanent ? currentPower(permanent) : def.power) : undefined;
   const toughness = isCreature ? (permanent ? currentToughness(permanent) : def.toughness) : undefined;
 
+  function statClass(current: number | undefined, base: number | undefined): string {
+    if (current === undefined || base === undefined) return '';
+    if (current > base) return 'card__pt-value--buffed';
+    if (current < base) return 'card__pt-value--debuffed';
+    return '';
+  }
+
+  const powerClass = statClass(power, def.power);
+  const toughnessClass = statClass(toughness, def.toughness);
+
   return (
     <button type="button" className={classNames} onClick={onClick} disabled={!onClick}>
       <div className="card__header">
@@ -54,7 +64,7 @@ export function CardView({ def, permanent, affordable = true, selected, highligh
       )}
       {power !== undefined && toughness !== undefined && (
         <div className="card__pt">
-          {power}/{toughness}
+          <span className={powerClass}>{power}</span>/<span className={toughnessClass}>{toughness}</span>
         </div>
       )}
       {permanent?.summoningSickness && <div className="card__badge">sick</div>}

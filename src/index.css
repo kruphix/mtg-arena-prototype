@@ -276,6 +276,14 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
+.card__pt-value--buffed {
+  color: #6bcf6b;
+}
+
+.card__pt-value--debuffed {
+  color: #ff6b6b;
+}
+
 .card__damage {
   color: #ff6b6b;
   font-size: 0.75em;
