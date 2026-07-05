@@ -10,6 +10,7 @@
   --tide-bg: #16283a;
   --colorless: #7a8090;
   --colorless-bg: #23262e;
+  --card-back-bg: #4b5160;
   --highlight: #f2c94c;
 
   font: 16px/1.4 system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -216,7 +217,7 @@ button {
   width: 60px;
   height: 84px;
   border-radius: 8px;
-  background: repeating-linear-gradient(45deg, var(--panel), var(--panel) 6px, var(--border) 6px, var(--border) 12px);
+  background: var(--card-back-bg);
   border: 1px solid var(--border);
 }
 

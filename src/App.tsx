@@ -165,6 +165,7 @@ export default function App() {
         selectable={canTargetPlayer}
         onSelect={() => handlePlayerPanelClick(opponent.id)}
       />
+      <Hand hand={opponent.hand} owner={opponent} faceDown canAct={false} onCardClick={() => {}} />
       <Board
         player={opponent}
         label={opponent.id}
