@@ -124,6 +124,8 @@ export default function App() {
       ? new Set(pendingBlockAttackerId ? [pendingBlockAttackerId] : [])
       : selectedAttackerIds;
 
+  const topSelectedIds = state.phase === 'declareBlockers' ? usedBlockerIds : undefined;
+
   const canTargetCreature = Boolean(targetingDef) && (targetingDef?.targetKind === 'creature' || targetingDef?.targetKind === 'any');
   const canTargetPlayer = Boolean(targetingDef) && (targetingDef?.targetKind === 'player' || targetingDef?.targetKind === 'any');
 
@@ -163,7 +165,13 @@ export default function App() {
         selectable={canTargetPlayer}
         onSelect={() => handlePlayerPanelClick(opponent.id)}
       />
-      <Board player={opponent} label={opponent.id} onPermanentClick={handleDefenderBoardClick} clickableIds={topClickable} />
+      <Board
+        player={opponent}
+        label={opponent.id}
+        onPermanentClick={handleDefenderBoardClick}
+        clickableIds={topClickable}
+        selectedIds={topSelectedIds}
+      />
 
       <PhaseBar
         phase={state.phase}

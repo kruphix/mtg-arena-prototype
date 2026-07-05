@@ -22,7 +22,7 @@ export function CombatOverlay({
       <div className="combat-overlay">
         <span>Click your creatures to select attackers ({selectedAttackerCount} selected).</span>
         <button type="button" onClick={onConfirmAttackers}>
-          Declare Attackers
+          Confirm Attackers
         </button>
       </div>
     );
@@ -36,7 +36,7 @@ export function CombatOverlay({
           assigned).
         </span>
         <button type="button" onClick={onConfirmBlockers}>
-          Declare Blockers
+          Confirm Blockers
         </button>
       </div>
     );
