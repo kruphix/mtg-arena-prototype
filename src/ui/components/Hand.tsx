@@ -34,6 +34,7 @@ export function Hand({ hand, owner, faceDown, canAct, selectedInstanceId, onCard
             def={def}
             affordable={!canAct || affordable}
             selected={selectedInstanceId === card.instanceId}
+            wide
             onClick={canAct ? () => onCardClick(card.instanceId) : undefined}
           />
         );

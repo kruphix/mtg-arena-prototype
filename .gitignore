@@ -25,3 +25,6 @@ dist-ssr
 
 # run-app skill scratch output
 .claude/skills/run-app/screenshots/
+
+# staging area for hand-generated card art (see scripts/import-card-art.mjs)
+art-source/

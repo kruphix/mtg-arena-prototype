@@ -1,5 +1,6 @@
 import type { CardDefinition, Permanent } from '../../engine/types';
 import { currentPower, currentToughness } from '../../engine/combat';
+import { CARD_ART } from '../cardArt';
 
 function formatCost(def: CardDefinition): string {
   if (!def.cost) return '';
@@ -20,10 +21,11 @@ interface CardViewProps {
   affordable?: boolean;
   selected?: boolean;
   highlighted?: boolean;
+  wide?: boolean;
   onClick?: () => void;
 }
 
-export function CardView({ def, permanent, affordable = true, selected, highlighted, onClick }: CardViewProps) {
+export function CardView({ def, permanent, affordable = true, selected, highlighted, wide, onClick }: CardViewProps) {
   const classNames = [
     'card',
     `card--${def.colors[0] ?? 'colorless'}`,
@@ -32,6 +34,7 @@ export function CardView({ def, permanent, affordable = true, selected, highligh
     selected ? 'card--selected' : '',
     highlighted ? 'card--highlighted' : '',
     !affordable ? 'card--unaffordable' : '',
+    wide ? 'card--wide' : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -57,7 +60,7 @@ export function CardView({ def, permanent, affordable = true, selected, highligh
         {def.cost && <span className="card__cost">{formatCost(def)}</span>}
       </div>
       <div className="card__type">{TYPE_LABELS[def.type]}</div>
-      <img className="card__art" src={`/cards/${def.id}.svg`} alt="" />
+      <img className="card__art" src={CARD_ART[def.id]} alt="" />
       {def.text && <div className="card__text">{def.text}</div>}
       {def.flavor && <div className="card__flavor">{def.flavor}</div>}
       {permanent && permanent.damage > 0 && (

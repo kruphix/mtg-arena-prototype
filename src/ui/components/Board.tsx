@@ -24,6 +24,7 @@ export function Board({ player, label, onPermanentClick, selectedIds, clickableI
         def={def}
         permanent={permanent}
         selected={selectedIds?.has(permanent.instanceId)}
+        wide
         onClick={clickable && onPermanentClick ? () => onPermanentClick(permanent.instanceId) : undefined}
       />
     );
